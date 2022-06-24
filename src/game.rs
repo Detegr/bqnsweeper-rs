@@ -3,7 +3,7 @@ static SRC: &'static str = include_str!("bqnsweeper.bqn");
 use cbqn::BQNValue;
 
 pub struct Game {
-    size: (i32, i32),
+    pub size: (i32, i32),
     chord_fn: BQNValue,
     flag_fn: BQNValue,
     guess_fn: BQNValue,
@@ -12,8 +12,8 @@ pub struct Game {
     showall_fn: BQNValue,
 }
 
-#[derive(Debug)]
-pub enum GameResult {
+#[derive(Debug, PartialEq)]
+pub enum GameState {
     Win,
     Loss,
     InProgress,
@@ -55,30 +55,21 @@ impl Game {
         self.guess_fn.call1(&[y, x].as_slice().into());
     }
 
-    pub fn render(&self) {
-        let rendered = self
-            .render_fn
+    pub fn render(&self) -> Vec<char> {
+        self.render_fn
             .call1(&BQNValue::null())
             .into_char_vec()
-            .unwrap();
-        for j in 0..self.size.1 {
-            for i in 0..self.size.0 {
-                print!("{}", rendered[(j * self.size.0 + i) as usize]);
-            }
-            println!("");
-        }
+            .unwrap()
     }
 
-    pub fn result(&self) -> GameResult {
-        match self.result_fn.call1(&BQNValue::null()).into_f64() {
-            0.0 => GameResult::InProgress,
-            x => {
-                if x < 0.0 {
-                    GameResult::Loss
-                } else {
-                    GameResult::Win
-                }
-            }
+    pub fn result(&self) -> GameState {
+        let res = self.result_fn.call1(&BQNValue::null()).into_f64();
+        if res < 0.0 {
+            GameState::Loss
+        } else if res > 0.0 {
+            GameState::Win
+        } else {
+            GameState::InProgress
         }
     }
 

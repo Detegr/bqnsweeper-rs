@@ -6,4 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-"cbqn" = { path = "../cbqn" }
+cbqn = { git = "https://github.com/Detegr/cbqn-rs.git" }
+ggez = "0.7"
