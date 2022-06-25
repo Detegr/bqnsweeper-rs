@@ -21,17 +21,14 @@ pub enum GameState {
 
 impl Game {
     pub fn new(mines: i32, size: (i32, i32)) -> Game {
-        fn nsget(func: &str) -> BQNValue {
-            cbqn::eval(&format!(r#"{{•BQN"{{𝕩."∾𝕩∾"}}"}} "{}""#, func))
-        }
         let new_game = cbqn::eval(SRC);
         let game = new_game.call2(&mines.into(), &[size.1, size.0].as_slice().into());
-        let chord_fn = nsget("Chord").call1(&game);
-        let flag_fn = nsget("Flag").call1(&game);
-        let guess_fn = nsget("Guess").call1(&game);
-        let render_fn = nsget("Render").call1(&game);
-        let result_fn = nsget("Result").call1(&game);
-        let showall_fn = nsget("ShowAll").call1(&game);
+        let chord_fn = game.get_field("chord").unwrap();
+        let flag_fn = game.get_field("flag").unwrap();
+        let guess_fn = game.get_field("guess").unwrap();
+        let render_fn = game.get_field("render").unwrap();
+        let result_fn = game.get_field("result").unwrap();
+        let showall_fn = game.get_field("showall").unwrap();
         Game {
             size,
             chord_fn,
