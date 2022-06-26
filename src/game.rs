@@ -41,15 +41,15 @@ impl Game {
     }
 
     pub fn chord(&mut self, x: i32, y: i32) {
-        self.chord_fn.call1(&[y, x].as_slice().into());
+        self.chord_fn.call1(&[y, x].into());
     }
 
     pub fn flag(&mut self, x: i32, y: i32) {
-        self.flag_fn.call1(&[y, x].as_slice().into());
+        self.flag_fn.call1(&[y, x].into());
     }
 
     pub fn guess(&mut self, x: i32, y: i32) {
-        self.guess_fn.call1(&[y, x].as_slice().into());
+        self.guess_fn.call1(&[y, x].into());
     }
 
     pub fn render(&self) -> Vec<char> {
